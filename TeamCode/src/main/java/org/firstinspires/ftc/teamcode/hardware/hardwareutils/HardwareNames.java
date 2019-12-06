@@ -5,19 +5,25 @@ package org.firstinspires.ftc.teamcode.hardware.hardwareutils;
  */
 public class HardwareNames {
 
-    //drive train motor names
-    public static final String leftFrontDriveMotor = "leftFrontDrive"; //
-    public static final String leftRearDriveMotor = "leftRearDrive";
-    public static final String rightFrontDriveMotor = "rightFrontDrive";
-    public static final String rightRearDriveMotor = "rightRearDrive";
+    // drive train subsystem components
+    public static final String leftRearDrive= "leftFrontDrive";
+    public static final String leftFrontDrive = "leftRearDrive";
+    public static final String rightFrontDrive = "rightFrontDrive";
+    public static final String rightRearDrive = "rightRearDrive";
 
-    //elevator motor names
-    public static final String leftElevatorActuator = "leftElevator"; // Hub 1 port 1
-    public static final String rightElevatorActuator = "rightElevator"; // Hub 1 Port 0
 
-    //latching mechanism servo name
-    public static final String latchingServo = "latch"; // port 0
+    // intake subsystem components
+    public static final String leftIntakeMotor = "leftIntakeMotor";
+    public static final String rightIntakeMotor = "rightIntakeMotor";
+    public static final String bootServo = "bootServo";
 
-    public static final String imu = "imu";
+    // arm motor names
+    public static final String elevatorMotor = "elevatorMotor";
 
+    // grabber subsystem components
+    public static final String latchingServo = "latchServo";
+    public static final String blockPanServo = "blockPanServo";
+
+    // color sensor
+    public static final String colorSensor = "colorSensor";
 }

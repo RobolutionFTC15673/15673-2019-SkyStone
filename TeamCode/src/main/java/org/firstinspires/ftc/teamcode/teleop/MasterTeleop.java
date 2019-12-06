@@ -4,12 +4,12 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.hardware.controls.GamepadWrapper;
 import org.firstinspires.ftc.teamcode.hardware.hardwareutils.HardwareManager;
-import org.firstinspires.ftc.teamcode.subsystems.Latch;
+import org.firstinspires.ftc.teamcode.subsystems.Elevator;
+import org.firstinspires.ftc.teamcode.subsystems.Grabber;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.TwinstickMecanum;
 import org.firstinspires.ftc.teamcode.subsystems.subsystemutils.Subsystem;
-import org.firstinspires.ftc.teamcode.subsystems.Elevator;
 import org.firstinspires.ftc.teamcode.subsystems.subsystemutils.SubsystemManager;
 
 @TeleOp
@@ -20,42 +20,64 @@ public class MasterTeleop extends OpMode {
     Gamepad manipController; //gamepad 2;
 
     SubsystemManager subsystems;
-    @Override
-    public void init_loop() {
-        // If you are using Motorola E4 phones,
-        // you should send telemetry data while waiting for start.
-        telemetry.addData("status", "loop test... waiting for start");
-    }
+
     @Override
     public void init() {
         //verify switch on bottom is in X pos
         //for drive controller, do Start btn + A btn
         //for manip controller, do Start btn + B btn
         hardware = new HardwareManager(hardwareMap);
-        driveController = new Gamepad();
-        manipController = new Gamepad();
-
+        driveController = gamepad1;
+        manipController = gamepad2;
 
         Subsystem drive = setUpDriveTrain();
-        Subsystem latch = setUpLatch();
         Subsystem elevator = setUpElevator();
-        subsystems = new SubsystemManager(drive, latch, elevator);
+        Subsystem grabber = setupGrabber();
+        Subsystem intake = setupIntake();
+
+        subsystems = new SubsystemManager(drive, elevator, grabber, intake);
+        subsystems.init();
+
     }
+
     @Override
     public void loop() {
+        telemetry.addData("status", "loop");
+        telemetry.update();
         subsystems.update();
+    }
 
+    private Subsystem setUpDriveTrain() {
+        return new TwinstickMecanum(
+                driveController,
+                hardware.leftFrontDrive,
+                hardware.rightFrontDrive,
+                hardware.leftRearDrive,
+                hardware.rightRearDrive
+        );
     }
 
     private Subsystem setUpElevator() {
-      return new Elevator(manipController, hardware.leftActuator, hardware.rightActuator);
+        return new Elevator(
+                manipController,
+                hardware.elevatorMotor
+        );
     }
-    private Subsystem setUpLatch()
-    {
-        return new Latch(manipController, hardware.latch);
+
+    private Subsystem setupIntake() {
+        return new Intake(
+                driveController,
+                hardware.boot,
+                hardware.leftIntakeMotor,
+                hardware.rightIntakeMotor
+        );
     }
-    private Subsystem setUpDriveTrain()
-    {
-        return new TwinstickMecanum(driveController, hardware.leftFrontDrive, hardware.rightFrontDrive, hardware.leftRearDrive, hardware.rightRearDrive);
+
+    private Subsystem setupGrabber() {
+        return new Grabber(
+                manipController,
+                hardware.latch,
+                hardware.blockPanServo
+        );
     }
 }

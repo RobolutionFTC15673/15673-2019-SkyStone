@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.hardware.controls.GamepadWrapper;
 import org.firstinspires.ftc.teamcode.subsystems.subsystemutils.Subsystem;
 
 public class TwinstickMecanum implements Subsystem {
@@ -44,12 +43,17 @@ public class TwinstickMecanum implements Subsystem {
         rightBMotor.setPower(rightB);
     }
 
-    public TwinstickMecanum(Gamepad driveController, DcMotor leftFMotor, DcMotor rightFMotor, DcMotor leftBMotor, DcMotor rightBMotor) {
+    public TwinstickMecanum(Gamepad driveController,
+                            DcMotor leftFrontDrive,
+                            DcMotor rightFrontDrive,
+                            DcMotor leftRearDrive,
+                            DcMotor rightRearDrive) {
+
         this.driveController = driveController;
-        this.leftFMotor = leftFMotor;
-        this.rightFMotor = rightFMotor;
-        this.rightBMotor = rightBMotor;
-        this.leftBMotor = leftBMotor;
+        this.leftFMotor = leftFrontDrive;
+        this.rightFMotor = rightFrontDrive;
+        this.rightBMotor = rightRearDrive;
+        this.leftBMotor = leftRearDrive;
     }
 
     @Override
@@ -59,7 +63,7 @@ public class TwinstickMecanum implements Subsystem {
 
     @Override
     public void update() {
-        setPower(driveController.left_stick_y, driveController.left_stick_x, driveController.right_stick_x);
+        setPower(driveController.left_stick_y, driveController.left_stick_x, -driveController.right_stick_x);
     }
 
 }

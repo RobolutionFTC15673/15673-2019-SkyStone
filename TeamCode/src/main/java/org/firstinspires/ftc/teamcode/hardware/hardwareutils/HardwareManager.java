@@ -1,13 +1,12 @@
 package org.firstinspires.ftc.teamcode.hardware.hardwareutils;
 
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.Servo;
-
-import org.firstinspires.ftc.teamcode.hardware.IMU;
-import org.firstinspires.ftc.teamcode.hardware.LinearActuator;
 
 /**
  * Contains all pieces of Hardware used on Robot. Only declare & initialize Hardware here.
@@ -16,51 +15,60 @@ public class  HardwareManager {
 
     HardwareMap hardwareMap;
 
-    //Drivetrain Motors
+    // Drive train Motors
     public DcMotor leftFrontDrive;
     public DcMotor rightFrontDrive;
-    public DcMotor leftRearDrive;
     public DcMotor rightRearDrive;
+    public DcMotor leftRearDrive;
+    public ColorSensor colorSensor;
 
-    //Elevator Linear Actuators
-    public LinearActuator leftActuator;
-    public LinearActuator rightActuator;
+    public DcMotor rightIntakeMotor;
+    public DcMotor leftIntakeMotor;
 
-    //Latching Mechanism Servo
+    // Elevator motors
+    public DcMotor elevatorMotor;
+
+    // Block Grabber
+    public CRServo blockPanServo;
+
+    // Latching Mechanism Servo
     public CRServo latch;
 
-    public IMU imu;
+    // Intake Mechanism Servo
+    public Servo boot;
 
-    public HardwareManager(HardwareMap hardwareMap)
-    {
+    public HardwareManager(HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;
-        initDrivetrain();
-        initElevator();
-        initLatchingMechanism();
-        imu = null; // hardwareMap.get(IMU.class, HardwareNames.imu);
+        initDriveTrain();
+        initGrabber();
+        initColorSensor();
+        initIntake();
     }
 
-    private void initDrivetrain()
-    {
-        leftFrontDrive = hardwareMap.get(DcMotor.class, HardwareNames.leftFrontDriveMotor);
-        leftRearDrive = hardwareMap.get(DcMotor.class, HardwareNames.leftRearDriveMotor);
-
-
-        rightFrontDrive = hardwareMap.get(DcMotor.class, HardwareNames.rightFrontDriveMotor);
+    private void initDriveTrain() {
+        // Set the motors
+        leftFrontDrive = hardwareMap.get(DcMotor.class, HardwareNames.leftFrontDrive);
+        leftRearDrive = hardwareMap.get(DcMotor.class, HardwareNames.leftRearDrive);
+        rightFrontDrive = hardwareMap.get(DcMotor.class, HardwareNames.rightFrontDrive);
+        rightRearDrive = hardwareMap.get(DcMotor.class, HardwareNames.rightRearDrive);
+        // Reverse right motors
         rightFrontDrive.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightRearDrive = hardwareMap.get(DcMotor.class, HardwareNames.rightRearDriveMotor);
         rightRearDrive.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
-    private void initElevator()
-    {
-        double leftActuatorScaleFactor = .97;
-        leftActuator = new LinearActuator(hardwareMap.get(DcMotor.class, HardwareNames.leftElevatorActuator), true);
-        leftActuator.scale(leftActuatorScaleFactor);
-        rightActuator = new LinearActuator(hardwareMap.get(DcMotor.class, HardwareNames.rightElevatorActuator), true);
-    }
-    private void initLatchingMechanism()
-    {
+    private void initGrabber() {
+        elevatorMotor = hardwareMap.get(DcMotor.class, HardwareNames.elevatorMotor);
         latch = hardwareMap.get(CRServo.class, HardwareNames.latchingServo);
+        blockPanServo = hardwareMap.get(CRServo.class, HardwareNames.blockPanServo);
+    }
+
+    private void initColorSensor() {
+        colorSensor = hardwareMap.get(ColorSensor.class, HardwareNames.colorSensor);
+    }
+
+    private void initIntake() {
+        rightIntakeMotor = hardwareMap.get(DcMotor.class, HardwareNames.rightIntakeMotor);
+        leftIntakeMotor = hardwareMap.get(DcMotor.class, HardwareNames.leftIntakeMotor);
+        boot = hardwareMap.get(Servo.class, HardwareNames.bootServo);
     }
 }
